@@ -13,7 +13,7 @@ import static com.oui.alex.xspeedit.domain.Box.MAX_CAPACITY;
 
 public class PackBoxService implements IPackBox {
 
-	private final Comparator<Box> REVERSE_WEIGHT = Comparator.comparing(Box::giveWeight).reversed();
+	private final Comparator<Box> WEIGHT = Comparator.comparing(Box::giveWeight);
 
 	@Override
 	public List<Box> pack(final List<Package> packages) {
@@ -24,7 +24,7 @@ public class PackBoxService implements IPackBox {
 			final Optional<Box> boxWithCapacity = findBoxNotFull(boxes, aPackage);
 
 			if (boxWithCapacity.isPresent()){
-				manageBoxWithCapacity(boxWithCapacity, aPackage);
+				boxWithCapacity.get().addPackage(aPackage);
 			}
 			else {
 				addNewBox(boxes, aPackage);
@@ -40,17 +40,10 @@ public class PackBoxService implements IPackBox {
 		boxes.add(newBox);
 	}
 
-	private void manageBoxWithCapacity(final Optional<Box> boxWithCapacity, final Package aPackage) {
-		boxWithCapacity.get().addPackage(aPackage);
-		boolean full = boxWithCapacity.get().giveWeight() == MAX_CAPACITY;
-		boxWithCapacity.get().setFull(full);
-	}
-
 	private Optional<Box> findBoxNotFull(final List<Box> boxes, final Package aPackage) {
 		return boxes.stream()
 				.filter(findBoxWithCapacity(aPackage))
-				.sorted(REVERSE_WEIGHT)
-				.findFirst();
+				.max(WEIGHT);
 	}
 
 	private Predicate<Box> findBoxWithCapacity(final Package aPackage) {

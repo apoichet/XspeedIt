@@ -7,10 +7,8 @@ public class Box {
 
 	private List<Package> packages;
 	private int number;
-	private boolean full;
 
 	public final static int MAX_CAPACITY = 10;
-
 
 	public Box(final int number) {
 		packages = new ArrayList<>();
@@ -25,20 +23,8 @@ public class Box {
 		this.number = number;
 	}
 
-	public List<Package> getPackages() {
-		return packages;
-	}
-
-	public void setPackages(final List<Package> packages) {
-		this.packages = packages;
-	}
-
 	public boolean isFull() {
-		return full;
-	}
-
-	public void setFull(final boolean full) {
-		this.full = full;
+		return giveWeight() == MAX_CAPACITY;
 	}
 
 	public int giveWeight(){
@@ -47,16 +33,22 @@ public class Box {
 				   .sum();
 	}
 
-	public boolean addPackage(Package aPackage){
-		return packages.add(aPackage);
+	public void addPackage(Package aPackage){
+		int newWeight = giveWeight() + aPackage.getWeight();
+		if (newWeight <= MAX_CAPACITY){
+			packages.add(aPackage);
+		}
+	}
 
+	public int getNbrPackage(){
+		return packages.size();
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("Box ");
 		sb.append(number);
-		sb.append(full?" full ":" not full ");
+		sb.append(isFull()?" full ":" not full ");
 		packages.forEach(p -> sb.append(p.toString()));
 		return sb.toString();
 	}
