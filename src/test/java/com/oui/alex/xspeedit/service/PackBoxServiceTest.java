@@ -111,26 +111,13 @@ public class PackBoxServiceTest {
 	@Test
 	public void should_give_EIGHT_box_when_1_6_3_8_4_1_6_8_9_5_2_5_7_7_3(){
 		//Given
-		given_packages(1,6,3,8,4,1,6,8,5,2,5,7,7,3,9);
+		given_packages(1,6,3,8,4,1,6,8,9,5,2,5,7,7,3);
 
 		//When
 		boxes = packBox.pack(packages);
 
 		//Then
 		then_assert_boxes_list_has_size(8);
-	}
-
-	@Test
-	public void should_contains_SIX_box_FULL_when_1_6_3_8_4_1_6_8_9_5_2_5_7_7_3(){
-		//Given
-		given_packages(1,6,3,8,4,1,6,8,5,2,5,7,7,3,9);
-
-		//When
-		boxes = packBox.pack(packages);
-
-		//Then
-		then_assert_boxes_list_has_size(8);
-		assertThat(boxes.stream().filter(Box::isFull).count()).isEqualTo(6);
 	}
 
 	private void given_packages(Integer... weights){

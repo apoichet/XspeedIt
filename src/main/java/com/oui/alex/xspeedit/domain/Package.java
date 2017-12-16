@@ -3,6 +3,7 @@ package com.oui.alex.xspeedit.domain;
 public class Package {
 
 	private int weight;
+	private boolean packaged;
 
 	public Package() {
 	}
@@ -17,6 +18,14 @@ public class Package {
 
 	public void setWeight(final int weight) {
 		this.weight = weight;
+	}
+
+	public boolean isPackaged() {
+		return packaged;
+	}
+
+	public void setPackaged(boolean packaged) {
+		this.packaged = packaged;
 	}
 
 	@Override

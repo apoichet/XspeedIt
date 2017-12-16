@@ -44,6 +44,14 @@ public class Box {
 		return packages.size();
 	}
 
+	public List<Package> getPackages() {
+		return packages;
+	}
+
+	public void setPackages(List<Package> packages) {
+		this.packages = packages;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("Box ");
