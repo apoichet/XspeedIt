@@ -6,6 +6,7 @@ import java.util.List;
 public class Box {
 
 	private List<Package> packages;
+	private List<Integer> stuff;
 	private int number;
 
 	public final static int MAX_CAPACITY = 10;
@@ -16,7 +17,8 @@ public class Box {
 	}
 
 	public Box() {
-		this.packages = new ArrayList<>();
+		//this.packages = new ArrayList<>();
+		this.stuff = new ArrayList<>();
 	}
 	public Box(List<Package> packages) {
 		this.packages = packages;
@@ -30,8 +32,20 @@ public class Box {
 		this.number = number;
 	}
 
+	/*
 	public boolean isFull() {
 		return giveWeight() == MAX_CAPACITY;
+	}
+	*/
+
+	public boolean isFull() {
+		return giveWeightStuff() == MAX_CAPACITY;
+	}
+
+	public int giveWeightStuff(){
+		return stuff.stream()
+				.mapToInt(Integer::intValue)
+				.sum();
 	}
 
 	public int giveWeight(){
@@ -48,6 +62,14 @@ public class Box {
 		return false;
 	}
 
+	public boolean addStuff(Integer paketWeight){
+		int newWeight = giveWeightStuff() + paketWeight;
+		if (newWeight <= MAX_CAPACITY){
+			return stuff.add(paketWeight);
+		}
+		return false;
+	}
+
 	public int getNbrPackage(){
 		return packages.size();
 	}
@@ -60,12 +82,31 @@ public class Box {
 		this.packages = packages;
 	}
 
+	public List<Integer> getStuff() {
+		return stuff;
+	}
+
+	public void setStuff(List<Integer> stuff) {
+		this.stuff = stuff;
+	}
+
+	/*
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("Box ");
 		sb.append(number);
 		sb.append(isFull()?" full ":" not full ");
 		packages.forEach(p -> sb.append(p.toString()));
+		return sb.toString();
+	}
+	*/
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("Box ");
+		sb.append(number);
+		sb.append(isFull()?" full ":" not full ");
+		stuff.forEach(p -> sb.append(p.toString()));
 		return sb.toString();
 	}
 }

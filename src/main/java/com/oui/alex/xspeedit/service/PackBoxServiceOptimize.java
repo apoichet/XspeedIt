@@ -4,9 +4,12 @@ import com.oui.alex.xspeedit.domain.Box;
 import com.oui.alex.xspeedit.domain.Package;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparingInt;
 
 public class PackBoxServiceOptimize implements IPackBox {
 
@@ -14,6 +17,8 @@ public class PackBoxServiceOptimize implements IPackBox {
 	public List<Box> pack(final List<Package> packages) {
 		List<Box> boxes = new ArrayList<>();
 		int count = 1;
+
+		packages.sort(comparingInt(Package::getWeight));
 
 		for (Package aPackage : packages) {
 

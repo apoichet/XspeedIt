@@ -18,28 +18,70 @@ public class PackBoxServiceNewWay implements IPackBox{
     @Override
     public List<Box> pack(List<Package> packages) {
 
-        //Genere les combinaisons possibles
-        Collection<List<Package>> packagePermutations = permutations(packages);
+        List<Integer> stuff = packages.stream().map(Package::getWeight).collect(Collectors.toList());
 
-        //Donne la liste des boites candidates
-        List<Box> boxCandidates = buildFullBoxes(packagePermutations);
+        Collection<List<Integer>> packagePermutations = permutations(stuff);
 
-        //Garde que les boite avec nombre de paquet max
-        List<Box> boxWithMaxPackages = keepBoxWithMaxPackage(boxCandidates);
+        return transformBis(packagePermutations);
+    }
 
-        //Recupere les paquets non encore en boite
-        List<Package> unBoxPackages = packages.stream()
-                .filter(Package::unBox)
-                .sorted(weightComparator())
-                .collect(Collectors.toList());
+    private List<Box> transformBis(Collection<List<Integer>> permutations){
 
-        //Construit des boites non remplies
-        List<Box> incompleteBoxes = buildBoxes(unBoxPackages);
+        List<Box> boxWithMinSize = new ArrayList<>();
 
-        //Combine les résultats
-        boxWithMaxPackages.addAll(incompleteBoxes);
+        for (List<Integer> permutation : permutations) {
 
-        return boxWithMaxPackages;
+            List<Box> boxes = getList(permutation);
+
+            if (boxes.size() < boxWithMinSize.size() || boxWithMinSize.isEmpty()){
+                boxWithMinSize = boxes;
+            }
+        }
+        return boxWithMinSize;
+    }
+
+    private List<Box> getList(List<Integer> permutation) {
+        List<Box> boxes = new ArrayList<>();
+        Box newBox = new Box();
+        boxes.add(newBox);
+
+        for (Integer packetWeight : permutation) {
+
+            boolean addPackage = newBox.addStuff(packetWeight);
+            if (!addPackage){
+                newBox = new Box();
+                newBox.addStuff(packetWeight);
+                boxes.add(newBox);
+            }
+
+
+        }
+
+        return boxes;
+    }
+
+    private Collection<List<Box>> transform(Collection<List<Integer>> permutations){
+
+        Collection<List<Box>> boxCandidates = new ArrayList<>();
+
+        for (List<Integer> permutation : permutations) {
+
+            List<Box> boxes = new ArrayList<>();
+            boxCandidates.add(boxes);
+            Box newBox = new Box();
+            boxes.add(newBox);
+
+            for (Integer packetWeight : permutation) {
+
+                boolean addPackage = newBox.addStuff(packetWeight);
+                if (!addPackage){
+                    newBox = new Box();
+                    newBox.addStuff(packetWeight);
+                    boxes.add(newBox);
+                }
+            }
+        }
+        return boxCandidates;
     }
 
     private Comparator<Package> weightComparator() {
@@ -80,11 +122,11 @@ public class PackBoxServiceNewWay implements IPackBox{
     private List<Box> buildFullBoxes(Collection<List<Package>> packagePermutations){
         List<Box> fullBoxes = new ArrayList<>();
 
-        for (List<Package> permutations : packagePermutations) {
+        for (List<Package> permutation : packagePermutations) {
 
             Box boxFull = new Box();
 
-            for (Package aPackage : permutations) {
+            for (Package aPackage : permutation) {
 
                 boolean addPackage = boxFull.addPackage(aPackage);
                 if (boxFull.isFull()){
