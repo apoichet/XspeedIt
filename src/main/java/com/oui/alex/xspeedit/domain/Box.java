@@ -15,6 +15,13 @@ public class Box {
 		this.number = number;
 	}
 
+	public Box() {
+		this.packages = new ArrayList<>();
+	}
+	public Box(List<Package> packages) {
+		this.packages = packages;
+	}
+
 	public int getNumber() {
 		return number;
 	}
@@ -33,11 +40,12 @@ public class Box {
 				   .sum();
 	}
 
-	public void addPackage(Package aPackage){
+	public boolean addPackage(Package aPackage){
 		int newWeight = giveWeight() + aPackage.getWeight();
 		if (newWeight <= MAX_CAPACITY){
-			packages.add(aPackage);
+			return packages.add(aPackage);
 		}
+		return false;
 	}
 
 	public int getNbrPackage(){

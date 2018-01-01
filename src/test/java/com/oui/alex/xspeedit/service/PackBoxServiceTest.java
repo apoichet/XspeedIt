@@ -20,7 +20,7 @@ import com.oui.alex.xspeedit.domain.Package;
 public class PackBoxServiceTest {
 
 	@InjectMocks
-	private PackBoxService packBox;
+	private PackBoxServiceNewWay packBox;
 
 	private List<Package> packages;
 	private List<Box> boxes;

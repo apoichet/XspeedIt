@@ -24,6 +24,10 @@ public class Package {
 		return packaged;
 	}
 
+	public boolean unBox() {
+		return !packaged;
+	}
+
 	public void setPackaged(boolean packaged) {
 		this.packaged = packaged;
 	}
